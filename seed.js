@@ -20,14 +20,14 @@ async function seed() {
   });
 
   await Book.create({
-    name: 'On Writing',
+    title: 'On Writing',
     description: "Steven King's bio on how he made it as a writer",
     status: true,
   });
   console.log('On writing is a must read!');
 
   await Book.create({
-    name: 'The Four Agreements',
+    title: 'The Four Agreements',
     description:
       'Four basic agreements that everyone should make with themselves in order to be happy',
     status: true,
