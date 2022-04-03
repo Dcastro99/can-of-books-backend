@@ -27,4 +27,7 @@ app.get('/books', async (request, response) => {
   //find all the books in the book collection => as json response obj
   const books = await Book.find({});
 
+  response.send(books);
+});
+
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
