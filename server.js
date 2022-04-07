@@ -9,6 +9,8 @@ const Book = require('./models/book');
 const app = express();
 app.use(cors());
 
+app.use(express.json());
+
 mongoose.connect(process.env.DATABASE_URL);
 
 const db = mongoose.connection;
@@ -28,6 +30,36 @@ app.get('/books', async (request, response) => {
   const books = await Book.find({});
 
   response.send(books);
+});
+
+app.post('/books', async (request, response) => {
+  // const newBook = request.body;
+  // if request.body has everything you need in the right shape
+  // then you can pass it straight to Model
+  // But often you'll need to mold the data a bit
+
+  const newBookinDB = await Book.create(request.body);
+  // console.log(request.body);
+  response.status(201).send(newBookinDB);
+});
+
+// delete a book
+app.delete('/books/:id', async (request, response, next) => {
+  // const id = request.params.id;
+
+  try {
+    console.log(request.params.id);
+    await Book.findByIdAndDelete(request.params.id);
+    response.status(204).send('Book was successfully deleted!');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// error handling middleware must be the last app.use()
+app.use((error, request, response, next) => {
+  response.status(500).send(error.message);
 });
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
