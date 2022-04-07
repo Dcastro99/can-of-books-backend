@@ -15,11 +15,6 @@ const seed = async () => {
     status: true,
   });
 
-  // myBook.save(function (err) {
-  //   if (err) console.error(err);
-  //   else console.log('The Alchemist rocks!');
-  // });
-
   await Book.create({
     title: 'On Writing',
     description: "Steven King's bio on how he made it as a writer",
