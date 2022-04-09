@@ -26,27 +26,22 @@ app.get('/test', (request, response) => {
 });
 
 app.get('/books', async (request, response) => {
-  //find all the books in the book collection => as json response obj
   const books = await Book.find({});
 
   response.send(books);
 });
 
-app.post('/books', async (request, response) => {
-  // const newBook = request.body;
-  // if request.body has everything you need in the right shape
-  // then you can pass it straight to Model
-  // But often you'll need to mold the data a bit
-
-  const newBookinDB = await Book.create(request.body);
-  // console.log(request.body);
-  response.status(201).send(newBookinDB);
+app.post('/books', async (request, response, next) => {
+  try {
+    const newBookinDB = await Book.create(request.body);
+    response.status(201).send(newBookinDB);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
-// delete a book
 app.delete('/books/:id', async (request, response, next) => {
-  // const id = request.params.id;
-
   try {
     console.log(request.params.id);
     await Book.findByIdAndDelete(request.params.id);
@@ -57,7 +52,22 @@ app.delete('/books/:id', async (request, response, next) => {
   }
 });
 
-// error handling middleware must be the last app.use()
+app.put('/books/:id', async (request, response, next) => {
+  try {
+    const updatedBook = await Book.findByIdAndUpdate(
+      request.params.id,
+      request.body,
+      {
+        new: true,
+      }
+    );
+    response.status(200).send(updatedBook);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 app.use((error, request, response, next) => {
   response.status(500).send(error.message);
 });
