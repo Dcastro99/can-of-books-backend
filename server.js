@@ -1,5 +1,7 @@
 'use strict';
 
+//  (O_O)
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -34,10 +36,7 @@ app.put('/books/:id', handlePutBooks);
 app.get('/user', handleGetUser);
 
 async function handleGetBooks(req, res) {
-  // instead of verifying the user email from the req.query we now get it from the verify user function
-  // in 401, verifyUser will become middleware
   try {
-    // make a query to Mongo asking it to find the books with an email that matches the req.user.email
     const books = await Book.find({ email: req.user.email });
     console.log('Books: ', books);
     res.status(200).send(books);
